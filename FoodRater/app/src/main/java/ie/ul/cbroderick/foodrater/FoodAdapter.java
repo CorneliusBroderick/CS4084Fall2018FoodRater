@@ -2,6 +2,7 @@ package ie.ul.cbroderick.foodrater;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -13,21 +14,28 @@ import java.util.List;
 
 public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.FoodViewHolder>{
 
-    private List<Food> mFoods = new ArrayList<>();
-
-    public void addFood(){
-        // TODO
-
-
-    }
-
     @NonNull
     @Override
     public FoodViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        // TODO
+        View itemView = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.food_item_view, parent, false);
+        return new FoodViewHolder(itemView);
+    }
 
+    private List<Food> mFoods = new ArrayList<>();
+    private RecyclerView mRecyclerView;
 
-        return null;
+    @Override
+    public void onAttachedToRecyclerView(@NonNull RecyclerView recyclerView) {
+        super.onAttachedToRecyclerView(recyclerView);
+        mRecyclerView = recyclerView;
+    }
+
+    public void addFood(){
+        mFoods.add(0, new Food());
+        notifyItemChanged(0);
+        notifyItemRangeChanged(0, mFoods.size());
+        mRecyclerView.getLayoutManager().scrollToPosition(0);
     }
 
     @Override
@@ -40,8 +48,7 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.FoodViewHolder
 
     @Override
     public int getItemCount() {
-        // TODO
-        return 0;
+        return mFoods.size();
     }
 
     class FoodViewHolder extends RecyclerView.ViewHolder {
