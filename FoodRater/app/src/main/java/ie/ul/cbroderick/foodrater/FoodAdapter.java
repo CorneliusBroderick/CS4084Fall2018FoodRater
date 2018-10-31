@@ -38,6 +38,12 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.FoodViewHolder
         mRecyclerView.getLayoutManager().scrollToPosition(0);
     }
 
+    private void deleteFood(int position){
+        mFoods.remove(position);
+        notifyItemRemoved(position);
+        notifyItemRangeChanged(0, mFoods.size());
+    }
+
     @Override
     public void onBindViewHolder(@NonNull FoodViewHolder holder, int position) {
         final Food food = mFoods.get(position);
@@ -63,6 +69,13 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.FoodViewHolder
             mRatingBar = itemView.findViewById(R.id.rating_bar);
 
             //TODO: Delete this food on long press
+            itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    deleteFood(getAdapterPosition());
+                    return true;
+                }
+            });
 
             // Done together, update the rating for this food
             mRatingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
